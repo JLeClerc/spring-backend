@@ -28,9 +28,13 @@ public class WidgetService {
 
     public Page<WidgetDto> findAll(WidgetDto widgetDto, Pageable pageable) {
         Widget widget = widgetMapper.toWidget(widgetDto);
-        ExampleMatcher exampleMatcher = ExampleMatcher.matching().withIgnoreCase().withIgnoreNullValues();
+        ExampleMatcher exampleMatcher = ExampleMatcher
+                .matchingAll()
+                .withIgnoreCase()
+                .withIgnoreNullValues()
+                .withStringMatcher(ExampleMatcher.StringMatcher.EXACT);
         Example<Widget> queryByExample = Example.of(widget, exampleMatcher);
-        Page<Widget> widgetPage= widgetRepository.findAll(queryByExample, pageable);
+        Page<Widget> widgetPage = widgetRepository.findAll(queryByExample, pageable);
         return widgetPage.map(widgetConverter);
     }
 }
